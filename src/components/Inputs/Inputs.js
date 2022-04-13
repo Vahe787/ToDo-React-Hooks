@@ -12,6 +12,8 @@ export default function Inputs() {
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || []
   );
+  const [selectedId, setSelectedId] = useState();
+  const [isClickedInKey, setIsClickedInKey] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
@@ -39,6 +41,16 @@ export default function Inputs() {
     }
   };
 
+  const handleItems = (id) => {
+    setSelectedId(id !== selectedId ? id : null);
+    setIsClickedInKey(true);
+  };
+  const changeClickedValue = () => {
+    setIsClickedInKey(false);
+  };
+
+  console.log(isClickedInKey);
+
   return (
     <div>
       <div>
@@ -46,7 +58,7 @@ export default function Inputs() {
           ToDo List
         </h1>
 
-        <div className="flex justify-center items-center pt-10 ">
+        <div className="flex justify-center items-center pt-5 ">
           <div className="p-2">
             <input
               onChange={(e) => setTask(e.target.value)}
@@ -79,21 +91,52 @@ export default function Inputs() {
             Save
           </button>
         </div>
-        <div className="flex justify-center mt-10"></div>
-      </div>
-      <div>
-        <div className="shadow-xl border-2 mt-10 ml-96 mr-96 bg-slate-600">
-          {items.map((el) => {
-            return (
-              <ul key={el.id}>
-                <li className="flex pl-48 pr-48 mb-3 mt-3">
-                  <button className="text-white text-3xl pr-10 pl-10 pt-2 pb-3 shadow-xl text-gray-500 border transition hover:bg-blue-400">
-                    {el.key}
-                  </button>
-                </li>
-              </ul>
-            );
-          })}
+        <div className="flex justify-center pb-5">
+          <div className="shadow-xl border-2 mt-10 ml-96 mr-96 bg-slate-600">
+            {items.map((el) => {
+              return (
+                <ul key={el.id}>
+                  <li className="flex pl-48 pr-48 mb-2 mt-2">
+                    <button
+                      style={{ display: isClickedInKey ? "none" : "block" }}
+                      onClick={() => handleItems(el.id)}
+                      className="text-white text-3xl pr-10 pl-10 pt-2 pb-3 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+                    >
+                      {el.key}
+                    </button>
+                  </li>
+                  {selectedId === el.id && (
+                    <div>
+                      {el.value.map((item) => {
+                        return (
+                          <p
+                            className="text-3xl border-b-2 p-2 pl-10 font-bold text-white"
+                            style={{
+                              display: isClickedInKey ? "block" : "none",
+                            }}
+                            key={item.id}
+                          >
+                            {item.task}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  )}
+                </ul>
+              );
+            })}
+          </div>
+        </div>
+        <div
+          style={{ display: isClickedInKey ? "block" : "none" }}
+          className="ml-60"
+        >
+          <button
+            onClick={changeClickedValue}
+            className="text-1xl pr-10 pl-10 pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+          >
+            Go Back
+          </button>
         </div>
       </div>
     </div>
