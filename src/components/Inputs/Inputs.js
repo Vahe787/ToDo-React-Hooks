@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 export default function Inputs() {
   const [task, setTask] = useState("");
@@ -49,8 +51,6 @@ export default function Inputs() {
     setIsClickedInKey(false);
   };
 
-  console.log(isClickedInKey);
-
   return (
     <div>
       <div>
@@ -91,11 +91,11 @@ export default function Inputs() {
             Save
           </button>
         </div>
-        <div className="flex justify-center pb-5">
-          <div className="shadow-xl border-2 mt-10 ml-96 mr-96 bg-slate-600">
+        <div className="flex justify-center pb-5 ">
+          <div className="shadow-xl border-2 mt-10 ml-96 mr-96 bg-slate-600 overflow-x-auto h-96">
             {items.map((el) => {
               return (
-                <ul key={el.id}>
+                <ul key={el.id} className="">
                   <li className="flex pl-48 pr-48 mb-2 mt-2">
                     <button
                       style={{ display: isClickedInKey ? "none" : "block" }}
@@ -109,15 +109,27 @@ export default function Inputs() {
                     <div>
                       {el.value.map((item) => {
                         return (
-                          <p
-                            className="text-3xl border-b-2 p-2 pl-10 font-bold text-white"
-                            style={{
-                              display: isClickedInKey ? "block" : "none",
-                            }}
-                            key={item.id}
-                          >
-                            {item.task}
-                          </p>
+                          <div>
+                            <ul>
+                              <li
+                                className="text-2xl border-b-2 p-2 pl-10 font-bold
+                            text-white"
+                                style={{
+                                  display: isClickedInKey ? "block" : "none",
+                                }}
+                              >
+                                {item.task}
+                                <span className="flex justify-end">
+                                  <button>
+                                    <BorderColorIcon className="text-blue-400 hover:text-blue-700" />
+                                  </button>
+                                  <button className="ml-3">
+                                    <DeleteIcon className="text-red-400 hover:text-red-700" />
+                                  </button>
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
                         );
                       })}
                     </div>
@@ -125,18 +137,18 @@ export default function Inputs() {
                 </ul>
               );
             })}
+            <div
+              style={{ display: isClickedInKey ? "block" : "none" }}
+              className="ml-60"
+            >
+              <button
+                onClick={changeClickedValue}
+                className="text-1xl pr-10 pl-10 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+              >
+                Go Back
+              </button>
+            </div>
           </div>
-        </div>
-        <div
-          style={{ display: isClickedInKey ? "block" : "none" }}
-          className="ml-60"
-        >
-          <button
-            onClick={changeClickedValue}
-            className="text-1xl pr-10 pl-10 pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-          >
-            Go Back
-          </button>
         </div>
       </div>
     </div>
