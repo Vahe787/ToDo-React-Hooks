@@ -7,6 +7,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { el } from "date-fns/locale";
 
 export default function Inputs() {
   const [task, setTask] = useState("");
@@ -44,7 +45,7 @@ export default function Inputs() {
   };
 
   const handleItems = (id) => {
-    setSelectedId(id !== selectedId ? id : null);
+    setSelectedId(id);
     setIsClickedInKey(true);
   };
   const changeClickedValue = () => {
@@ -109,7 +110,7 @@ export default function Inputs() {
                     <div>
                       {el.value.map((item) => {
                         return (
-                          <div>
+                          <div key={item.id}>
                             <ul>
                               <li
                                 className="text-2xl border-b-2 p-2 pl-10 font-bold
@@ -123,6 +124,7 @@ export default function Inputs() {
                                   <button>
                                     <BorderColorIcon className="text-blue-400 hover:text-blue-700" />
                                   </button>
+
                                   <button className="ml-3">
                                     <DeleteIcon className="text-red-400 hover:text-red-700" />
                                   </button>
