@@ -155,7 +155,14 @@ export default function Inputs() {
                                 display: isClickedInKey ? "block" : "none",
                               }}
                             >
-                              <p className="text-2xl text-white w-96">
+                              <p
+                                className="text-2xl text-white w-96"
+                                style={{
+                                  textDecoration: item.isCompleted
+                                    ? "line-through"
+                                    : "",
+                                }}
+                              >
                                 {item.task}
                               </p>
                             </li>
