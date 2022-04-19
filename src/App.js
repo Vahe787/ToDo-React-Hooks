@@ -1,10 +1,10 @@
 import React from "react";
-import Inputs from "./components/Inputs/Inputs";
+import ToDo from "./components/ToDo";
 
 function App() {
   return (
     <div className="App">
-      <Inputs />
+      <ToDo />
     </div>
   );
 }
