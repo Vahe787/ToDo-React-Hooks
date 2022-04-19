@@ -7,11 +7,12 @@ import DatePicker from "@mui/lab/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { el } from "date-fns/locale";
+import CheckBox from "./CheckBox/CheckBox";
 
 export default function Inputs() {
   const [task, setTask] = useState("");
   const [myDate, setMyDate] = useState(null);
+  const [isCompleted] = useState(false);
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || {}
   );
@@ -27,6 +28,7 @@ export default function Inputs() {
       const newItem = {
         task,
         id: uuidv4(),
+        isCompleted: isCompleted,
       };
       if (items[myDate]) {
         setItems((prevState) => ({
@@ -65,6 +67,17 @@ export default function Inputs() {
       changeClickedValue();
     }
     setItems(updatedItems);
+  };
+
+  const handleChecked = (date, id) => {
+    const checkedItem = items[date].find((el) => el.id === id);
+    const updateItems = { ...items };
+    if (!checkedItem.isCompleted) {
+      updateItems[date].find((el) => el.id === id).isCompleted = true;
+    } else {
+      updateItems[date].find((el) => el.id === id).isCompleted = false;
+    }
+    setItems(updateItems);
   };
 
   return (
@@ -124,9 +137,20 @@ export default function Inputs() {
                     <div>
                       {items[key].map((item) => (
                         <div className="flex" key={item.id}>
-                          <ul className="border-b-2 border-gray-400 mt-3">
+                          <ul className="flex border-b-2 border-gray-400 mt-3">
+                            <div
+                              style={{
+                                display: isClickedInKey ? "block" : "none",
+                              }}
+                            >
+                              <button
+                                onClick={() => handleChecked(key, item.id)}
+                              >
+                                <CheckBox />
+                              </button>
+                            </div>
                             <li
-                              className="ml-12"
+                              className="ml-8"
                               style={{
                                 display: isClickedInKey ? "block" : "none",
                               }}
