@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import TaskInput from "./Inputs/TaskInput";
+import DateInput from "./Inputs/DateInput";
 import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DatePicker from "@mui/lab/DatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DeleteIcon from "@mui/icons-material/Delete";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import SaveItemsInStorage from "./Buttons/SaveItemsInStroge";
+import { v4 as uuidv4 } from "uuid";
+import ReferanceToTasks from "./Buttons/ReferanceToTasks";
+import DeleteTask from "./Buttons/DeleteTask";
+import ChangeTask from "./Buttons/ChangeTask";
+import TasksToReferance from "./Buttons/TasksToReferance";
 import CheckBox from "./CheckBox/CheckBox";
 
-export default function Inputs() {
+const ToDo = () => {
   const [task, setTask] = useState("");
   const [myDate, setMyDate] = useState(null);
   const [isCompleted] = useState(false);
+  const [selectedId, setSelectedId] = useState();
+  const [isClickedInKey, setIsClickedInKey] = useState(false);
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || {}
   );
-  const [selectedId, setSelectedId] = useState();
-  const [isClickedInKey, setIsClickedInKey] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
@@ -89,50 +90,31 @@ export default function Inputs() {
 
         <div className="flex justify-center items-center pt-5 ">
           <div className="p-2">
-            <input
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
-              className="text-2xl shadow-xl text-gray-500 text-center p-2 border outline-none placeholder-gray-300"
-              placeholder="Enter your task..."
+            <TaskInput value={task} onChange={(e) => setTask(e.target.value)} />
+          </div>
+          <div>
+            <DateInput
+              clearable
+              value={myDate}
+              onChange={(newDate) =>
+                setMyDate(newDate ? newDate.toLocaleDateString() : null)
+              }
+              renderInput={(params) => <TextField {...params} />}
             />
           </div>
-
-          <div>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <div className="flex justify-center">
-                <ToggleButtonGroup exclusive sx={{ display: "block" }} />
-                <DatePicker
-                  clearable
-                  value={myDate}
-                  onChange={(newDate) =>
-                    setMyDate(newDate ? newDate.toLocaleDateString() : null)
-                  }
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </div>
-            </LocalizationProvider>
-          </div>
-          <button
-            onClick={addNewItem}
-            className="ml-2 text-2xl pr-10 pl-10 pt-2 pb-3 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-          >
-            Save
-          </button>
+          <SaveItemsInStorage onClick={addNewItem} />
         </div>
-        <div className="flex justify-center pb-5 ">
+        <div className="flex justify-center pb-5">
           <div className="shadow-xl border-2 mt-10 bg-slate-600 overflow-x-auto h-96">
             {Object.keys(items).map((key) => {
               return (
-                <ul key={key} className="">
-                  <li className="flex pl-48 pr-48 mb-2 mt-2">
-                    <button
-                      style={{ display: isClickedInKey ? "none" : "block" }}
-                      onClick={() => handleItems(key)}
-                      className="text-white text-3xl pr-10 pl-10 pt-2 pb-3 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-                    >
-                      {key}
-                    </button>
-                  </li>
+                <ul key={key}>
+                  <ReferanceToTasks
+                    style={{ display: isClickedInKey ? "none" : "block" }}
+                    onClick={() => handleItems(key)}
+                  >
+                    {key}
+                  </ReferanceToTasks>
                   {selectedId === key && (
                     <div>
                       {items[key].map((item) => (
@@ -173,16 +155,10 @@ export default function Inputs() {
                               display: isClickedInKey ? "block" : "none",
                             }}
                           >
-                            <button>
-                              <BorderColorIcon className="text-blue-400 hover:text-blue-700" />
-                            </button>
-
-                            <button
+                            <ChangeTask />
+                            <DeleteTask
                               onClick={() => handleDelete(key, item.id)}
-                              className="ml-2 pr-2"
-                            >
-                              <DeleteIcon className="text-red-400 hover:text-red-700" />
-                            </button>
+                            />
                           </div>
                         </div>
                       ))}
@@ -195,16 +171,13 @@ export default function Inputs() {
               style={{ display: isClickedInKey ? "block" : "none" }}
               className="ml-96 mr-3 mt-10 mb-5"
             >
-              <button
-                onClick={changeClickedValue}
-                className="pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-              >
-                Go Back
-              </button>
+              <TasksToReferance onClick={changeClickedValue} />
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ToDo;
