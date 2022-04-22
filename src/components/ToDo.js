@@ -9,6 +9,7 @@ import DeleteTask from "./Buttons/DeleteTask";
 import ChangeTask from "./Buttons/ChangeTask";
 import TasksToReferance from "./Buttons/TasksToReferance";
 import CheckBox from "./CheckBox/CheckBox";
+import NewTaskInput from "./Inputs/NewTaskInput";
 
 const ToDo = () => {
   const [task, setTask] = useState("");
@@ -16,6 +17,8 @@ const ToDo = () => {
   const [isCompleted] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [isClickedInKey, setIsClickedInKey] = useState(false);
+  const [isCahnged] = useState(false);
+  const [newTask, setNewTask] = useState("");
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || {}
   );
@@ -30,6 +33,7 @@ const ToDo = () => {
         task,
         id: uuidv4(),
         isCompleted: isCompleted,
+        isCahnged: isCahnged,
       };
       if (items[myDate]) {
         setItems((prevState) => ({
@@ -78,6 +82,26 @@ const ToDo = () => {
     } else {
       updateItems[date].find((el) => el.id === id).isCompleted = false;
     }
+    setItems(updateItems);
+  };
+
+  const handleIsChangedTask = (date, id) => {
+    const changedItem = items[date].find((el) => el.id === id);
+    const updateItems = { ...items };
+    if (!changedItem.isCahnged) {
+      updateItems[date].find((el) => el.id === id).isCahnged = true;
+    }
+    setItems(updateItems);
+  };
+
+  const changeTask = (date, id) => {
+    const changedItem = items[date].find((el) => el.id === id);
+    const updateItems = { ...items };
+    if (changedItem.isCahnged) {
+      updateItems[date].find((el) => el.id === id).task = newTask;
+      updateItems[date].find((el) => el.id === id).isCahnged = false;
+    }
+    setNewTask("");
     setItems(updateItems);
   };
 
@@ -147,6 +171,24 @@ const ToDo = () => {
                               >
                                 {item.task}
                               </p>
+                              <div
+                                className="pb-2 pt-2"
+                                style={{
+                                  display: item.isCahnged ? "block" : "none",
+                                }}
+                              >
+                                <NewTaskInput
+                                  value={newTask}
+                                  onChange={(e) => setNewTask(e.target.value)}
+                                />
+
+                                <button
+                                  onClick={() => changeTask(key, item.id)}
+                                  className="ml-24 pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+                                >
+                                  Change
+                                </button>
+                              </div>
                             </li>
                           </ul>
                           <div
@@ -155,7 +197,9 @@ const ToDo = () => {
                               display: isClickedInKey ? "block" : "none",
                             }}
                           >
-                            <ChangeTask />
+                            <ChangeTask
+                              onClick={() => handleIsChangedTask(key, item.id)}
+                            />
                             <DeleteTask
                               onClick={() => handleDelete(key, item.id)}
                             />
