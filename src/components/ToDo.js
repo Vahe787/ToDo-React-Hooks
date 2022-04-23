@@ -134,10 +134,7 @@ const ToDo = () => {
           <div className="shadow-xl border-2 mt-10 bg-slate-600 overflow-x-auto h-96">
             {Object.keys(items).map((key) => {
               return (
-                <ul
-                  key={key}
-                  className="sm:flex justify-center sm:ml-12 sm:mr-12"
-                >
+                <ul key={key} className="sm:flex justify-center p-2">
                   <ReferanceToTasks
                     style={{ display: isClickedInKey ? "none" : "block" }}
                     onClick={() => handleItems(key)}
