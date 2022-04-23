@@ -107,13 +107,13 @@ const ToDo = () => {
 
   return (
     <div>
-      <div>
+      <div className="">
         <h1 className="flex justify-center text-6xl text-gray-500">
           ToDo List
         </h1>
 
-        <div className="flex justify-center items-center pt-5 ">
-          <div className="p-2">
+        <div className="flex justify-center items-center pt-5 sm:block justify-center">
+          <div className="flex justify-center p-2">
             <TaskInput value={task} onChange={(e) => setTask(e.target.value)} />
           </div>
           <div>
@@ -126,13 +126,18 @@ const ToDo = () => {
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
-          <SaveItemsInStorage onClick={addNewItem} />
+          <div className="flex justify-center sm:mt-5">
+            <SaveItemsInStorage onClick={addNewItem} />
+          </div>
         </div>
         <div className="flex justify-center pb-5">
           <div className="shadow-xl border-2 mt-10 bg-slate-600 overflow-x-auto h-96">
             {Object.keys(items).map((key) => {
               return (
-                <ul key={key}>
+                <ul
+                  key={key}
+                  className="sm:flex justify-center sm:ml-12 sm:mr-12"
+                >
                   <ReferanceToTasks
                     style={{ display: isClickedInKey ? "none" : "block" }}
                     onClick={() => handleItems(key)}
@@ -142,27 +147,28 @@ const ToDo = () => {
                   {selectedId === key && (
                     <div>
                       {items[key].map((item) => (
-                        <div className="flex" key={item.id}>
-                          <ul className="flex border-b-2 border-gray-400 mt-3">
+                        <div className="flex " key={item.id}>
+                          <ul className="flex border-b-2 border-gray-400 mt-3 ">
                             <div
                               style={{
                                 display: isClickedInKey ? "block" : "none",
                               }}
                             >
                               <button
+                                className=""
                                 onClick={() => handleChecked(key, item.id)}
                               >
                                 <CheckBox />
                               </button>
                             </div>
                             <li
-                              className="ml-8"
+                              className="ml-8 sm:m-0"
                               style={{
                                 display: isClickedInKey ? "block" : "none",
                               }}
                             >
                               <p
-                                className="text-2xl text-white w-96"
+                                className="text-2xl text-white w-96 sm:w-44"
                                 style={{
                                   textDecoration: item.isCompleted
                                     ? "line-through"
@@ -177,17 +183,20 @@ const ToDo = () => {
                                   display: item.isCahnged ? "block" : "none",
                                 }}
                               >
-                                <NewTaskInput
-                                  value={newTask}
-                                  onChange={(e) => setNewTask(e.target.value)}
-                                />
-
-                                <button
-                                  onClick={() => changeTask(key, item.id)}
-                                  className="ml-24 pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-                                >
-                                  Change
-                                </button>
+                                <div>
+                                  <NewTaskInput
+                                    value={newTask}
+                                    onChange={(e) => setNewTask(e.target.value)}
+                                  />
+                                </div>
+                                <div>
+                                  <button
+                                    onClick={() => changeTask(key, item.id)}
+                                    className="ml-24 pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+                                  >
+                                    Change
+                                  </button>
+                                </div>
                               </div>
                             </li>
                           </ul>
@@ -213,7 +222,7 @@ const ToDo = () => {
             })}
             <div
               style={{ display: isClickedInKey ? "block" : "none" }}
-              className="ml-96 mr-3 mt-10 mb-5"
+              className="ml-96 mr-3 mt-10 mb-5 sm:ml-44"
             >
               <TasksToReferance onClick={changeClickedValue} />
             </div>
