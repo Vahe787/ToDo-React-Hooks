@@ -152,7 +152,6 @@ const ToDo = () => {
                               }}
                             >
                               <button
-                                className=""
                                 onClick={() => handleChecked(key, item.id)}
                               >
                                 <CheckBox />
@@ -165,7 +164,7 @@ const ToDo = () => {
                               }}
                             >
                               <p
-                                className="text-2xl text-white w-96 sm:w-44"
+                                className="text-2xl text-white w-96 mb-2 sm:w-44"
                                 style={{
                                   textDecoration: item.isCompleted
                                     ? "line-through"
@@ -175,25 +174,21 @@ const ToDo = () => {
                                 {item.task}
                               </p>
                               <div
-                                className="pb-2 pt-2"
+                                className="pb-2 pt-2 sm:w-5"
                                 style={{
                                   display: item.isCahnged ? "block" : "none",
                                 }}
                               >
-                                <div>
-                                  <NewTaskInput
-                                    value={newTask}
-                                    onChange={(e) => setNewTask(e.target.value)}
-                                  />
-                                </div>
-                                <div>
-                                  <button
-                                    onClick={() => changeTask(key, item.id)}
-                                    className="ml-24 pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
-                                  >
-                                    Change
-                                  </button>
-                                </div>
+                                <NewTaskInput
+                                  value={newTask}
+                                  onChange={(e) => setNewTask(e.target.value)}
+                                />
+                                <button
+                                  onClick={() => changeTask(key, item.id)}
+                                  className="ml-24 pr-5 pl-5 font-bold pt-2 pb-2 shadow-xl text-gray-500 border transition hover:bg-blue-400 sm:ml-20 sm:mt-2"
+                                >
+                                  Change
+                                </button>
                               </div>
                             </li>
                           </ul>
